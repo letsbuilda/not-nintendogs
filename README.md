@@ -1,2 +1,2 @@
-# nintendogs
-nintendogs for pyweek
+# not-nintendogs
+not-nintendogs for pyweek
