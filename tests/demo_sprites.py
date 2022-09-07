@@ -7,7 +7,6 @@ from not_nintendogs.sprites import AnimSprite, SpriteInfo
 
 class SpriteApp(App):
     async def on_start(self):
-        # graphic = GraphicWidget(size_hint=(1.0, 1.0))
         graphic = AnimSprite("Retriever01.png", SpriteInfo.DOG, pos=(4, 3))
         self.add_widget(graphic)
 
@@ -23,7 +22,6 @@ class SpriteApp(App):
 
         root_menu = self.children[-1]
         root_menu.is_enabled = False
-        # root_menu.children[1].item_disabled = True
 
         def toggle_root_menu():
             if root_menu.is_enabled:
@@ -37,8 +35,6 @@ class SpriteApp(App):
 
         graphic.start_animation()
 
-        # await asyncio.sleep(2)
-        # graphic.play_liedown()
 
-
-SpriteApp(title="Sprite Test").run()
+if __name__ == "__main__":
+    SpriteApp(title="Sprite Test").run()
