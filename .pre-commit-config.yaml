@@ -16,6 +16,7 @@ repos:
     hooks:
       - id: isort
         name: isort (python)
+        args: [--profile, black]
 
   # Upgrade syntax to newer versions
   - repo: https://github.com/asottile/pyupgrade

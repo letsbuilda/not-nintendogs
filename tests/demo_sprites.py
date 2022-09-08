@@ -2,12 +2,12 @@ from nurses_2.app import App
 from nurses_2.widgets.button import Button
 from nurses_2.widgets.menu import Menu
 
-from not_nintendogs.sprites import AnimSprite, SpriteInfo
+from not_nintendogs.sprites import AnimSprite, SpriteSheet
 
 
 class SpriteApp(App):
     async def on_start(self):
-        graphic = AnimSprite("Retriever01.png", SpriteInfo.DOG, pos=(4, 3))
+        graphic = AnimSprite(SpriteSheet.HUSKY, pos=(4, 3))
         self.add_widget(graphic)
 
         # Setup menu
@@ -34,6 +34,7 @@ class SpriteApp(App):
         )
 
         graphic.start_animation()
+        # graphic.anim_run.is_enabled = True
 
 
 if __name__ == "__main__":

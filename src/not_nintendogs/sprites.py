@@ -1,57 +1,91 @@
 import asyncio
 import itertools
+from collections.abc import Generator
 from enum import Enum
 from functools import cached_property
-from os import PathLike
-from pathlib import Path
 
 import cv2
 import numpy as np
 import toml
+from numpy.typing import NDArray
+from nurses_2.widgets.animation import Animation
 from nurses_2.widgets.graphic_widget import GraphicWidget
-from nurses_2.widgets.graphic_widget_data_structures import Sprite
+from nurses_2.widgets.graphic_widget_data_structures import Interpolation, Size, Sprite
 
 from .data import SPRITES_DIR
-from .logger import log
 
 
-class SpriteInfo(Enum):
-    DOG = "dog.toml"
+class SpriteSheet(Enum):
+    HUSKY = ("husky.png", "dog.toml")
+
+    @cached_property
+    def texture(self) -> NDArray:
+        """Read the sprite sheet into a numpy array."""
+        path = (SPRITES_DIR / self.value[0]).resolve()
+        if not path.exists():
+            raise FileNotFoundError(f"{path} does not exist.")
+
+        image = cv2.imread(str(path), cv2.IMREAD_UNCHANGED)
+
+        if image.dtype == np.dtype(np.uint16):
+            image = (image // 257).astype(np.uint8)
+        elif image.dtype == np.dtype(np.float32):
+            image = (image * 255).astype(np.uint8)
+
+        # Add an alpha channel if there isn't one.
+        h, w, c = image.shape
+        if c == 3:
+            default_alpha_channel = np.full((h, w, 1), 255, dtype=np.uint8)
+            image = np.dstack((image, default_alpha_channel))
+
+        texture = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
+
+        return texture
+
+    @cached_property
+    def metadata(self) -> dict:
+        return toml.load(SPRITES_DIR / self.value[1])
+
+    @property
+    def info(self) -> dict:
+        return self.metadata["info"]
+
+    @property
+    def shape(self) -> Size:
+        return Size(self.info["width"], self.info["height"])
 
 
 class AnimSprite(GraphicWidget):
-    def __init__(self, sprite_sheet: str | PathLike, info: SpriteInfo, **kwargs):
-        self.sprite_sheet = (SPRITES_DIR / Path(sprite_sheet)).absolute()
-        if not self.sprite_sheet.exists():
-            raise FileNotFoundError(f"{self.sprite_sheet} does not exist.")
-        self.sprite_metadata = toml.load(SPRITES_DIR / info.value)
-        self.sprite_info = self.sprite_metadata["info"]
-        w, h = self.sprite_info["width"], self.sprite_info["height"]
-        log.info(f"Sprite size: {w} x {h}")
-        log.info(f"Array shape: {(s := self.sheet_texture.shape)} ({s[0]})")
-        row = 0
-        self.idle_frames = [
-            Sprite(
-                self.sheet_texture[
-                    32 * row : 32 * (row + 1), 1 + (40 * i) : 1 + (40 * (i + 1))
-                ]
-            )
-            for i in range(2)  # 4
-        ]
-        row = 7
-        self.frames = [
-            Sprite(
-                self.sheet_texture[
-                    32 * row : 32 * (row + 1), 1 + (40 * i) : 1 + (40 * (i + 1))
-                ]
-            )
-            for i in range(14)  # 15
-        ]
-
+    def __init__(self, info: SpriteSheet, **kwargs):
         super().__init__(size=(32, 40), **kwargs)
-        self.texture[:] = 0, 0, 0, 255
-        self.frames[0].paint(self.texture, pos=(0, 0))
+        self._sheet = info
+
+        self.frames_idle = list(self._get_anim_frames(0, 4))
+        self.frames_liedown = list(self._get_anim_frames(7, 15))
+        self.anim_run = Animation.from_sprites(
+            self._get_anim_frames(4, 4),
+            size_hint=(1, 1),
+            pos=(0, 0),
+            interpolation=Interpolation.NEAREST,
+        )
+
+        # self.texture[:] = 0, 0, 0, 255
+        # self.frames_liedown[0].paint(self.texture, pos=(0, 0))
+
+        self.add_widget(self.anim_run)
         self.in_idle = False
+
+    def _get_anim_frames(
+        self, row: int, num_frames: int
+    ) -> Generator[Sprite, None, None]:
+        """Get animation frames_liedown from sprite sheet."""
+        shape = self._sheet.shape
+        x1 = shape.width * row
+        x2 = shape.width * (row + 1)
+        for i in range(num_frames):
+            y1 = 1 + shape.height * i
+            y2 = 1 + shape.height * (i + 1)
+            yield Sprite(self._sheet.texture[x1:x2, y1:y2])
 
     def start_animation(self):
         self.in_idle = True
@@ -74,36 +108,14 @@ class AnimSprite(GraphicWidget):
         asyncio.create_task(_anim())
 
     def anim_idle(self):
-        for frame in itertools.cycle(self.idle_frames):
+        for frame in itertools.cycle(self.frames_idle):
             self.texture[:] = 0, 0, 0, 255
             frame.paint(self.texture)
             yield
 
     def anim_liedown(self):
-        for frame in self.frames:
+        for frame in self.frames_liedown:
             self.texture[:] = 0, 0, 0, 255
             frame.paint(self.texture)
             yield
         self.start_animation()
-
-    @cached_property
-    def sheet_texture(self):
-        """
-        Read the sprite sheet into a numpy array.
-        """
-        image = cv2.imread(str(self.sprite_sheet), cv2.IMREAD_UNCHANGED)
-
-        if image.dtype == np.dtype(np.uint16):
-            image = (image // 257).astype(np.uint8)
-        elif image.dtype == np.dtype(np.float32):
-            image = (image * 255).astype(np.uint8)
-
-        # Add an alpha channel if there isn't one.
-        h, w, c = image.shape
-        if c == 3:
-            default_alpha_channel = np.full((h, w, 1), 255, dtype=np.uint8)
-            image = np.dstack((image, default_alpha_channel))
-
-        texture = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
-
-        return texture
