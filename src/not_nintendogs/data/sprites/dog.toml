@@ -1,0 +1,27 @@
+[info]
+width = 40
+height = 32
+
+[[frames]]
+name = 'stand'
+pos = [[0, 0], [0, 3]]
+
+[[frames]]
+name = 'look_around'
+pos = [[1, 0], [1, 7]]
+
+[[frames]]
+name = 'walk'
+pos = [[2, 0], [2, 3]]
+
+[[frames]]
+name = 'run'
+pos = [[3, 0], [3, 3]]
+
+[[frames]]
+name = 'wait'
+pos = [[4, 0], [4, 3]]
+
+[[frames]]
+name = 'bark'
+pos = [[5, 0], [5, 4]]
