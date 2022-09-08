@@ -153,7 +153,7 @@ python-versions = ">=3.8"
 
 [[package]]
 name = "nurses-2"
-version = "0.11.5"
+version = "0.11.7"
 description = "A widgetful and async-centric library for terminal graphics."
 category = "main"
 optional = false
@@ -354,7 +354,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "virtualenv"
-version = "20.16.4"
+version = "20.16.5"
 description = "Virtual Python Environment builder"
 category = "dev"
 optional = false
@@ -380,7 +380,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10, <3.12"
-content-hash = "396ac708b1c75920b5d8f665aa8c62b8ca7a46c572e89b49af3570faaf4109b9"
+content-hash = "59c59b044191752bf3fea4f8fbaf5b3d1c4cd52ecc19143dbf9806a779863e42"
 
 [metadata.files]
 attrs = [
@@ -487,8 +487,8 @@ numpy = [
     {file = "numpy-1.23.2.tar.gz", hash = "sha256:b78d00e48261fbbd04aa0d7427cf78d18401ee0abd89c7559bbf422e5b1c7d01"},
 ]
 nurses-2 = [
-    {file = "nurses_2-0.11.5-py3-none-any.whl", hash = "sha256:28f01950fa405436fbf6189775771dcb77b71afb9a024a3762b78210692aca47"},
-    {file = "nurses_2-0.11.5.tar.gz", hash = "sha256:dcef1ec4a4378de9be03e37b5456f5bb68eb4425f030f5afa71db73c7119e625"},
+    {file = "nurses_2-0.11.7-py3-none-any.whl", hash = "sha256:4324031ce5f8dc037ac89118ecb5bbba7ebb1f5bf6a3176ab0c94999e1e4c69f"},
+    {file = "nurses_2-0.11.7.tar.gz", hash = "sha256:118226c4ba9c00652b09e60014b3d4a86f185c70af8f6f321888094e7b81e8f6"},
 ]
 opencv-python = [
     {file = "opencv-python-4.5.5.62.tar.gz", hash = "sha256:3efe232b32d5e1327e7c82bc6d61230737821c5190ce5c783e64a1bc8d514e18"},
@@ -591,8 +591,8 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 virtualenv = [
-    {file = "virtualenv-20.16.4-py3-none-any.whl", hash = "sha256:035ed57acce4ac35c82c9d8802202b0e71adac011a511ff650cbcf9635006a22"},
-    {file = "virtualenv-20.16.4.tar.gz", hash = "sha256:014f766e4134d0008dcaa1f95bafa0fb0f575795d07cae50b1bee514185d6782"},
+    {file = "virtualenv-20.16.5-py3-none-any.whl", hash = "sha256:d07dfc5df5e4e0dbc92862350ad87a36ed505b978f6c39609dc489eadd5b0d27"},
+    {file = "virtualenv-20.16.5.tar.gz", hash = "sha256:227ea1b9994fdc5ea31977ba3383ef296d7472ea85be9d6732e42a91c04e80da"},
 ]
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},

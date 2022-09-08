@@ -8,8 +8,9 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10, <3.12"
 textual = "^0.1.18"
-opencv-python = "4.5.5.62"
-nurses-2 = "^0.11.5"
+# Newer opencv 4.6 had issues with attribute inspection, pinning 4.5 for now
+opencv-python = ">= 4.5.4.58, <=4.5.5.62"
+nurses-2 = "0.11.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.1.3"
