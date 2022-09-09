@@ -1,2 +1,2 @@
 # not-nintendogs
-not-nintendogs for pyweek
+A dog themed terminal game in Nurses 2 for PyWeek
