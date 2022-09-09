@@ -1,11 +1,10 @@
 from importlib.resources import files
 
+from rich.panel import Panel, Text
 from textual.app import App
 from textual.reactive import Reactive
-from textual.widgets import Footer, Placeholder
 from textual.widget import Widget
-from rich.panel import Panel
-from rich.panel import Text
+from textual.widgets import Footer, Placeholder
 
 from not_nintendogs import data
 
